@@ -37,19 +37,13 @@
           <div class="card-body">
             <h5 class="card-title">Instructions</h5>
             <ol class="overflow-y-auto">
-
               <li class="card-text left" v-for="(step, index) in structuredInstructions" :key="index">{{step}}</li>
             </ol>
-
           </div>
         </div>
       </div>
     </div>
   </div>
-
-
-
-
 
   <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
     aria-hidden="true">
@@ -69,7 +63,6 @@
           <div v-else>
             Sorry there is no youtube video available for this recipe
           </div>
-
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -86,7 +79,7 @@ export default {
   name: 'ChosenMeal',
   props: ['id'],
 
-  data() {
+  data () {
     return {
       chosenMeal: [],
       youTubeLink: String,
@@ -98,47 +91,43 @@ export default {
   },
 
   methods: {
-    getChosenMealDetails(id) {
+    /* Using the prop id from the url fetch all recipe details */
+    getChosenMealDetails (id) {
       console.log('getImages')
       axios
         .get('https://www.themealdb.com/api/json/v1/1/lookup.php?i=' + id)
         .then(response => {
           this.chosenMeal = [response.data.meals[0].strMeal, response.data.meals[0].strMealThumb, response.data.meals[0].strYoutube, [], response.data.meals[0].strInstructions, response.data.meals[0].strArea, response.data.meals[0].strCategory, response.data.meals[0].strTags]
           this.youTubeLink = response.data.meals[0].strYoutube.replace('watch?v=', 'embed/')
-          this.structuredInstructions = response.data.meals[0].strInstructions.split(".");
-          this.structuredInstructions.splice(-1) //needed to remove the empty array element after the final '.'
+          this.structuredInstructions = response.data.meals[0].strInstructions.split('.')
+          this.structuredInstructions.splice(-1) // needed to remove the empty array element after the final '.'
 
-          for (var item in response.data.meals[0]) {
-            if (response.data.meals[0][item] != null) {
-              if (item.includes('Ingredient') && response.data.meals[0][item].trim().length != 0) {
+          for (const item in response.data.meals[0]) {
+            if (response.data.meals[0][item] !== null) {
+              if (item.includes('Ingredient') && response.data.meals[0][item].trim().length !== 0) {
                 this.ingredients.push(response.data.meals[0][item])
               }
-              if (item.includes('Measure') && response.data.meals[0][item].trim().length != 0) {
+              if (item.includes('Measure') && response.data.meals[0][item].trim().length !== 0) {
                 this.measurements.push(response.data.meals[0][item])
               }
             }
-
           }
-
-          this.ingredientsAndMeasurements = this.ingredients.map((ingredient, i) => [ingredient, this.measurements[i]]);
-
+          this.ingredientsAndMeasurements = this.ingredients.map((ingredient, i) => [ingredient, this.measurements[i]])
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
-        .finally(() => this.loading = false)
+        
       return this.image
-    },
+    }
 
   },
 
-  mounted() {
-    this.getChosenMealDetails(this.id);
-  },
-};
+  mounted () {
+    this.getChosenMealDetails(this.id)
+  }
+}
 </script>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
@@ -166,12 +155,10 @@ export default {
   height: 100%;
 }
 
-
 #mealIngredients, #mealInstructions,  #mealPicture {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-
 
 #mealIngredients ul {
   height: 360px;
@@ -197,10 +184,6 @@ export default {
 #mealInstructions {
   width: 600px
 }
-
-/* #mealInstructions ol{
-  height: calc(100% - 24px - 8px);
-} */
 
 ul {
   padding-left: 1.1em;

@@ -34,7 +34,7 @@
   </nav>
 
 </template>
-  
+
 <script>
 import axios from 'axios'
 
@@ -42,71 +42,67 @@ export default {
   name: 'Navigation',
   props: {
   },
-  data() {
+  data () {
     return {
       upgradedAPIKey: '9973533',
       listOfFirstLetter: [],
       inputValue: '',
-      randomId: String,
+      randomId: String
     }
   },
 
   methods: {
-    getMealByLetter(letter) {
+    /* Called when user inuts first letter into search bar */
+    getMealByLetter (letter) {
       this.listOfFirstLetter = []
       axios
         .get('https://www.themealdb.com/api/json/v1/1/search.php?f=' + letter)
         .then(response => {
-          response.data.meals.forEach(meal => this.listOfFirstLetter.push([meal.strMeal, meal.idMeal]));
-
+          response.data.meals.forEach(meal => this.listOfFirstLetter.push([meal.strMeal, meal.idMeal]))
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
-        .finally(() => this.loading = false)
     },
-    filterFunction() {
-      var filter, li, txtValue;
+    /* calls api on first letter, then filters the result by the next letters */
+    filterFunction () {
+      let filter, li, txtValue
       if (this.inputValue.length === 1) {
-        const firstLetter = this.inputValue.charAt(0);
+        const firstLetter = this.inputValue.charAt(0)
         this.getMealByLetter(firstLetter)
       } else {
-        filter = this.inputValue.toUpperCase();
-        li = document.getElementsByName("mealOption");
-        for (var i = 0; i < li.length; i++) {
-          txtValue = li[i].textContent || li.innerText;
+        filter = this.inputValue.toUpperCase()
+        li = document.getElementsByName('mealOption')
+        for (let i = 0; i < li.length; i++) {
+          txtValue = li[i].textContent || li.innerText
           if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
+            li[i].style.display = ''
           } else {
-            li[i].style.display = "none";
+            li[i].style.display = 'none'
           }
         }
-
       }
     },
-    generateRandomMealId() {
+    /* generates a random id from api. This will be used for the url route */
+    generateRandomMealId () {
       axios
         .get('https://www.themealdb.com/api/json/v1/1/random.php')
         .then(response => {
           this.randomId = response.data.meals[0].idMeal
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
-          this.errored = true
         })
-        .finally(() => this.loading = false)
-
-    },
+    }
   },
 
-  mounted() {
+  mounted () {
+    /* called initally so the user doesnt have to wait */
     this.generateRandomMealId()
-  },
-};
+  }
+}
 </script>
-  
-  
+
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .navbar {
@@ -170,10 +166,6 @@ export default {
   display: block
 }
 
-/* #myUL li a:hover:not(.header) {
-  background-color: #eee;
-} */
-
 h3 {
   margin-top: 0;
   margin-bottom: 0;
@@ -193,4 +185,3 @@ a {
   color: #42b983;
 }
 </style>
-  

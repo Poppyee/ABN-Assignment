@@ -25,7 +25,6 @@
             </div>
           </div>
         </div>
-
         <a class="carousel-control-prev" href="#carouseIIndicators" role="button" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
@@ -38,7 +37,6 @@
     </div>
   </div>
 
-
 </template>
 
 <script>
@@ -48,51 +46,34 @@ export default {
   props: {
     msg: String
   },
-  data() {
+  data () {
     return {
+      /* Required to access all api endpoints */
       upgradedAPIKey: '9973533',
-      picturesForCarosel: [],
+      picturesForCarosel: []
     }
   },
 
   methods: {
-    get10Images() {
+    /* Returns 10 images used for the carousel */
+    get10Images () {
       axios
         .get('https://www.themealdb.com/api/json/v2/' + this.upgradedAPIKey + '/randomselection.php')
         .then(response => {
-          response.data.meals.forEach(meal => this.picturesForCarosel.push([meal.strMealThumb, meal.strArea, meal.strCategory, meal.idMeal]));
+          response.data.meals.forEach(meal => this.picturesForCarosel.push([meal.strMealThumb, meal.strArea, meal.strCategory, meal.idMeal]))
           console.log('this.picturesForCarosel', this.picturesForCarosel)
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
-        .finally(() => this.loading = false)
-    },
-
-    getRandomImage() {
-      console.log('getImages')
-      axios
-        .get('https://www.themealdb.com/api/json/v1/1/random.php')
-        .then(response => {
-          this.info = response
-        })
-        .catch(error => {
-          console.log(error)
-          this.errored = true
-        })
-        .finally(() => this.loading = false)
-      return this.image
-    },
-
+    }
   },
 
-  mounted() {
-    this.get10Images();
-  },
-};
+  mounted () {
+    this.get10Images()
+  }
+}
 </script>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
@@ -144,8 +125,6 @@ export default {
 .carousel-control-prev:hover {
   opacity: 1;
 }
-
-
 
 h1 {
   padding: 20px;
