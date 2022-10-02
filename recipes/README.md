@@ -31,7 +31,7 @@ To check linting run:
 ```
 
 
-### libraries
+### Libraries
 
 Styling: https://getbootstrap.com/docs/4.0/components
 Testing: https://v1.test-utils.vuejs.org/installation/#semantic-versioning  
